@@ -459,6 +459,37 @@
             });
         }
 
+        /**
+         * Generates a random hex color code
+         * @returns {string} - Random hex color in format #RRGGBB
+         */
+        function getRandomColor() {
+            // Generate random values for R, G, B (0-255)
+            const r = Math.floor(Math.random() * 256);
+            const g = Math.floor(Math.random() * 256);
+            const b = Math.floor(Math.random() * 256);
+            
+            // Convert to hex and pad with zeros if needed
+            const hex = '#' + 
+                r.toString(16).padStart(2, '0') +
+                g.toString(16).padStart(2, '0') +
+                b.toString(16).padStart(2, '0');
+            
+            return hex.toUpperCase();
+        }
+
+        /**
+         * Sets a random background color on page load
+         */
+        function setRandomBackgroundColor() {
+            const randomColor = getRandomColor();
+            document.body.style.backgroundColor = randomColor;
+            console.log('Background color set to:', randomColor);
+        }
+
+        // Set random background color when page loads
+        setRandomBackgroundColor();
+
         // Event listeners
         showColorsBtn.addEventListener('click', displayColors);
 
