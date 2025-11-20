@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hex Color Viewer</title>
+    <style>
+        /* Neobrutalism design system with bold, harsh aesthetics */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: #979797;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 48px;
+            font-weight: 900;
+            text-transform: uppercase;
+            color: #000;
+            border: 6px solid #000;
+            padding: 20px 30px;
+            background-color: #FFD700;
+            box-shadow: 12px 12px 0 #000;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .subtitle {
+            background-color: #fff;
+            border: 4px solid #000;
+            padding: 15px 25px;
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+            box-shadow: 8px 8px 0 #000;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        /* Input section with thick borders and shadows */
+        .input-section {
+            background: #fff;
+            border: 6px solid #000;
+            box-shadow: 12px 12px 0px #000;
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+
+        label {
+            display: block;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #000;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        /* Textarea with harsh borders */
+        textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            border: 4px solid #000;
+            background: #F5F5F5;
+            resize: vertical;
+            outline: none;
+        }
+
+        textarea:focus {
+            background: #fff;
+            box-shadow: 0 0 0 4px #00E676;
+        }
+
+        /* Button with neobrutalism style */
+        button {
+            margin-top: 20px;
+            padding: 15px 40px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            background: #00E676;
+            color: #000;
+            border: 4px solid #000;
+            cursor: pointer;
+            box-shadow: 6px 6px 0px #000;
+            transition: all 0.1s;
+        }
+
+        button:hover {
+            transform: translate(2px, 2px);
+            box-shadow: 4px 4px 0px #000;
+        }
+
+        button:active {
+            transform: translate(6px, 6px);
+            box-shadow: 0px 0px 0px #000;
+        }
+
+        /* Grid container for color tiles */
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        /* Individual color tile with thick borders */
+        .color-tile {
+            aspect-ratio: 1;
+            border: 6px solid #000;
+            box-shadow: 8px 8px 0px #000;
+            cursor: pointer;
+            transition: all 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .color-tile:hover {
+            transform: translate(3px, 3px);
+            box-shadow: 5px 5px 0px #000;
+        }
+
+        .color-tile:active {
+            transform: translate(8px, 8px);
+            box-shadow: 0px 0px 0px #000;
+        }
+
+        /* Label inside each tile - WCAG compliant colors */
+        .color-label {
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            font-weight: bold;
+            text-align: center;
+            padding: 10px;
+            word-break: break-all;
+            text-transform: uppercase;
+        }
+
+        /* Invalid hex code tile styling */
+        .invalid-tile {
+            background: repeating-linear-gradient(
+                45deg,
+                #FF1744,
+                #FF1744 10px,
+                #000 10px,
+                #000 20px
+            );
+        }
+
+        .invalid-label {
+            background: #fff;
+            color: #000;
+            padding: 15px;
+            border: 3px solid #000;
+            font-size: 0.85rem;
+        }
+
+        /* Copy notification toast */
+        .copy-notification {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: #00E676;
+            color: #000;
+            padding: 20px 30px;
+            border: 5px solid #000;
+            box-shadow: 8px 8px 0px #000;
+            font-weight: bold;
+            font-size: 1.1rem;
+            z-index: 1000;
+            animation: slideIn 0.3s, slideOut 0.3s 2.7s;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .color-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+            <h1>BATCH HEX CODE VIEWER</h1>
+
+         <p class="subtitle">Enter hex codes separated by spaces or commas</p>
+
+        <!-- Input section -->
+        <div class="input-section">
+            <label for="hexInput">Hex Codes:</label>
+            <textarea 
+                id="hexInput" 
+                placeholder="e.g., #FF5733 3498db, #2ecc71 e74c3c #9b59b6"
+                aria-label="Enter hex color codes separated by spaces or commas"
+            ></textarea>
+            <button id="showColors" type="button">SHOW COLORS</button>
+        </div>
+
+        <!-- Grid container for color tiles -->
+        <div class="color-grid" id="colorGrid"></div>
+    </div>
+
+    <script>
+        // Get DOM elements
+        const hexInput = document.getElementById('hexInput');
+        const showColorsBtn = document.getElementById('showColors');
+        const colorGrid = document.getElementById('colorGrid');
+
+        /**
+         * Validates if a string is a valid hex color code
+         * Accepts 3 or 6 character hex codes with or without #
+         * @param {string} hex - The hex string to validate
+         * @returns {boolean} - True if valid, false otherwise
+         */
+        function isValidHex(hex) {
+            // Remove # if present
+            const cleanHex = hex.replace('#', '');
+            // Check if it's 3 or 6 characters and contains only valid hex characters
+            return /^[0-9A-Fa-f]{3}$|^[0-9A-Fa-f]{6}$/.test(cleanHex);
+        }
+
+        /**
+         * Normalizes hex code to full 6-character format with #
+         * Converts 3-char hex codes to 6-char by doubling each character
+         * @param {string} hex - The hex string to normalize
+         * @returns {string} - Normalized hex code with #
+         */
+        function normalizeHex(hex) {
+            // Remove # if present
+            let cleanHex = hex.replace('#', '').toUpperCase();
+            
+            // If 3 characters, expand to 6 (e.g., "F00" becomes "FF0000")
+            if (cleanHex.length === 3) {
+                cleanHex = cleanHex.split('').map(char => char + char).join('');
+            }
+            
+            return '#' + cleanHex;
+        }
+
+        /**
+         * Calculates relative luminance of a color according to WCAG standards
+         * Formula from WCAG 2.1 specification
+         * @param {number} r - Red value (0-255)
+         * @param {number} g - Green value (0-255)
+         * @param {number} b - Blue value (0-255)
+         * @returns {number} - Relative luminance (0-1)
+         */
+        function getRelativeLuminance(r, g, b) {
+            // Normalize RGB values to 0-1 range
+            const rsRGB = r / 255;
+            const gsRGB = g / 255;
+            const bsRGB = b / 255;
+
+            // Apply gamma correction as per WCAG formula
+            const rLinear = rsRGB <= 0.03928 ? rsRGB / 12.92 : Math.pow((rsRGB + 0.055) / 1.055, 2.4);
+            const gLinear = gsRGB <= 0.03928 ? gsRGB / 12.92 : Math.pow((gsRGB + 0.055) / 1.055, 2.4);
+            const bLinear = bsRGB <= 0.03928 ? bsRGB / 12.92 : Math.pow((bsRGB + 0.055) / 1.055, 2.4);
+
+            // Calculate relative luminance using WCAG coefficients
+            return 0.2126 * rLinear + 0.7152 * gLinear + 0.0722 * bLinear;
+        }
+
+        /**
+         * Determines if text should be black or white based on background color
+         * Uses WCAG contrast ratio guidelines for accessibility
+         * @param {string} hexColor - Background color in hex format
+         * @returns {string} - Either '#000000' (black) or '#FFFFFF' (white)
+         */
+        function getContrastingTextColor(hexColor) {
+            // Remove # and convert hex to RGB
+            const hex = hexColor.replace('#', '');
+            const r = parseInt(hex.substr(0, 2), 16);
+            const g = parseInt(hex.substr(2, 2), 16);
+            const b = parseInt(hex.substr(4, 2), 16);
+
+            // Calculate luminance
+            const luminance = getRelativeLuminance(r, g, b);
+
+            // Return black text for light backgrounds, white for dark
+            // Threshold of 0.5 provides good contrast in most cases
+            return luminance > 0.5 ? '#000000' : '#FFFFFF';
+        }
+
+        /**
+         * Copies text to clipboard and shows notification
+         * Uses modern Clipboard API with fallback
+         * @param {string} text - Text to copy to clipboard
+         */
+        function copyToClipboard(text) {
+            // Use modern Clipboard API
+            navigator.clipboard.writeText(text).then(() => {
+                showCopyNotification(text);
+            }).catch(err => {
+                // Fallback for older browsers
+                console.error('Failed to copy:', err);
+            });
+        }
+
+        /**
+         * Shows a temporary notification when hex code is copied
+         * @param {string} hexCode - The hex code that was copied
+         */
+        function showCopyNotification(hexCode) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = 'copy-notification';
+            notification.textContent = `COPIED: ${hexCode}`;
+            notification.setAttribute('role', 'alert');
+            notification.setAttribute('aria-live', 'polite');
+            
+            document.body.appendChild(notification);
+
+            // Remove notification after animation completes
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        /**
+         * Creates a color tile element for the grid
+         * @param {string} hexCode - The hex color code
+         * @param {boolean} isValid - Whether the hex code is valid
+         * @returns {HTMLElement} - The created tile element
+         */
+        function createColorTile(hexCode, isValid) {
+            const tile = document.createElement('div');
+            tile.className = 'color-tile';
+            
+            if (isValid) {
+                // Normalize the hex code
+                const normalizedHex = normalizeHex(hexCode);
+                
+                // Set background color
+                tile.style.backgroundColor = normalizedHex;
+                
+                // Create label with contrasting text color
+                const label = document.createElement('div');
+                label.className = 'color-label';
+                label.textContent = normalizedHex;
+                label.style.color = getContrastingTextColor(normalizedHex);
+                
+                tile.appendChild(label);
+                
+                // Add click handler to copy hex code
+                tile.addEventListener('click', () => {
+                    copyToClipboard(normalizedHex);
+                });
+                
+                // Add keyboard accessibility
+                tile.setAttribute('tabindex', '0');
+                tile.setAttribute('role', 'button');
+                tile.setAttribute('aria-label', `Copy color ${normalizedHex}`);
+                
+                // Handle Enter/Space key press
+                tile.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        copyToClipboard(normalizedHex);
+                    }
+                });
+            } else {
+                // Create invalid tile with striped background
+                tile.classList.add('invalid-tile');
+                
+                const label = document.createElement('div');
+                label.className = 'color-label invalid-label';
+                label.textContent = `INVALID: ${hexCode}`;
+                
+                tile.appendChild(label);
+                
+                // Make non-interactive
+                tile.style.cursor = 'not-allowed';
+                tile.setAttribute('aria-label', `Invalid hex code: ${hexCode}`);
+            }
+            
+            return tile;
+        }
+
+        /**
+         * Parses input string and extracts hex codes
+         * Handles multiple separators: spaces, commas, or combinations
+         * @param {string} input - Raw input string from textarea
+         * @returns {Array<string>} - Array of hex code strings
+         */
+        function parseHexCodes(input) {
+            // Split by spaces and/or commas, filter empty strings
+            return input
+                .split(/[\s,]+/)
+                .map(code => code.trim())
+                .filter(code => code.length > 0);
+        }
+
+        /**
+         * Main function to process input and display color tiles
+         */
+        function displayColors() {
+            // Clear existing tiles
+            colorGrid.innerHTML = '';
+            
+            // Get input value
+            const input = hexInput.value.trim();
+            
+            if (!input) {
+                return;
+            }
+            
+            // Parse hex codes from input
+            const hexCodes = parseHexCodes(input);
+            
+            // Create a tile for each hex code
+            hexCodes.forEach(hexCode => {
+                const isValid = isValidHex(hexCode);
+                const tile = createColorTile(hexCode, isValid);
+                colorGrid.appendChild(tile);
+            });
+        }
+
+        // Event listeners
+        showColorsBtn.addEventListener('click', displayColors);
+
+        // Allow Enter key in textarea to trigger display (Ctrl+Enter or Cmd+Enter)
+        hexInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+                e.preventDefault();
+                displayColors();
+            }
+        });
+    </script>
+</body>
+</html>
