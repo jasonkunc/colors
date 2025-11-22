@@ -16,6 +16,7 @@
             background-color: #979797;
             padding: 40px 20px;
             min-height: 100vh;
+            transition: background-color 0.3s ease;
         }
         
         .container {
@@ -50,7 +51,39 @@
         
         .input-container {
             text-align: center;
-            margin: 40px 0;
+            margin: 50px 0;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        /* Main Original Label (Pop-out style) */
+        .original-label {
+            display: none;
+            position: absolute;
+            top: -20px;
+            right: -15px;
+            background-color: #FF00FF;
+            color: #FFFFFF;
+            border: 4px solid #000;
+            padding: 5px 15px;
+            font-weight: 900;
+            font-size: 14px;
+            text-transform: uppercase;
+            box-shadow: 4px 4px 0 #000;
+            transform: rotate(3deg);
+            z-index: 10;
+            pointer-events: none;
+            animation: popIn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0) rotate(0deg); }
+            to { transform: scale(1) rotate(3deg); }
         }
         
         input {
@@ -59,7 +92,6 @@
             font-weight: bold;
             font-family: 'Courier New', monospace;
             width: 100%;
-            max-width: 400px;
             text-align: center;
             text-transform: uppercase;
             border: 5px solid #000;
@@ -80,12 +112,21 @@
         
         .shade-container {
             display: flex;
+            flex-direction: row;
+            gap: 20px;
+            align-items: flex-start;
+        }
+        
+        .shade-column {
+            flex: 1;
+            display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 15px; /* Increased gap slightly to separate tiles */
         }
         
         .shade-box {
-            padding: 25px;
+            position: relative; /* Needed for absolute positioning of the label */
+            padding: 30px 20px 20px 20px; /* More padding top for the label */
             text-align: center;
             font-weight: 900;
             font-size: 18px;
@@ -106,24 +147,21 @@
             transform: translate(6px, 6px);
             box-shadow: 0 0 0 #000;
         }
-        
-        .original-color {
-            border: 6px solid #000;
-            padding: 35px 25px;
-            font-size: 28px;
-            box-shadow: 10px 10px 0 #000;
-            position: relative;
-        }
-        
-        .original-color::before {
-            content: '★ ORIGINAL ★';
+
+        /* NEW: Percentage Label Style */
+        .percentage-label {
             position: absolute;
-            top: 5px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 12px;
-            letter-spacing: 3px;
-            opacity: 0.7;
+            top: -4px;
+            left: -4px;
+            background-color: #ffffff; /* White background for consistency */
+            color: #000000;
+            border: 3px solid #000;
+            font-size: 10px;
+            font-weight: 900;
+            padding: 4px 8px;
+            box-shadow: 3px 3px 0 rgba(0,0,0,1);
+            pointer-events: none; /* Allows clicking "through" the label to copy color */
+            z-index: 2;
         }
         
         .error-message {
@@ -136,6 +174,7 @@
             box-shadow: 8px 8px 0 #000;
             margin: 20px 0;
             color: #000;
+            width: 100%;
         }
         
         .copy-notification {
@@ -164,6 +203,12 @@
             font-size: 32px;
             letter-spacing: 3px;
         }
+        
+        @media (max-width: 600px) {
+            .shade-container {
+                flex-direction: column;
+            }
+        }
     </style>
 </head>
 <body style="background-color: rgb(163, 99, 78);">
@@ -175,7 +220,10 @@
         </div>
         
         <div class="input-container">
-            <input type="text" id="colorInput" placeholder="#FFFFFF" maxlength="7">
+            <div class="input-wrapper">
+                <div id="originalLabel" class="original-label">Original</div>
+                <input type="text" id="colorInput" placeholder="#FFFFFF" maxlength="7">
+            </div>
         </div>
         
         <div id="shadeContainer" class="shade-container"></div>
@@ -189,6 +237,7 @@
     <script>
         // Get references to DOM elements
         const colorInput = document.getElementById('colorInput');
+        const originalLabel = document.getElementById('originalLabel');
         const shadeContainer = document.getElementById('shadeContainer');
         const copyNotification = document.getElementById('copyNotification');
         const copiedHex = document.getElementById('copiedHex');
@@ -219,13 +268,8 @@
          * @param {string} hexCode - The hex code that was copied
          */
         function showCopyNotification(hexCode) {
-            // Update the notification with the copied hex code
             copiedHex.textContent = hexCode;
-            
-            // Show the notification with animation
             copyNotification.classList.add('show');
-            
-            // Hide the notification after 1 second
             setTimeout(() => {
                 copyNotification.classList.remove('show');
             }, 1000);
@@ -233,125 +277,72 @@
 
         /**
          * Converts hex color to RGB object
-         * @param {string} hex - Hex color code (e.g., "#ffffff" or "#fff")
-         * @returns {object} RGB values {r, g, b}
          */
         function hexToRgb(hex) {
-            // Remove # if present
             hex = hex.replace('#', '');
-            
-            // Convert 3-digit hex to 6-digit
             if (hex.length === 3) {
                 hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
             }
-            
-            // Parse hex values to decimal
             const r = parseInt(hex.substring(0, 2), 16);
             const g = parseInt(hex.substring(2, 4), 16);
             const b = parseInt(hex.substring(4, 6), 16);
-            
             return { r, g, b };
         }
 
         /**
          * Converts RGB values to hex color code
-         * @param {number} r - Red value (0-255)
-         * @param {number} g - Green value (0-255)
-         * @param {number} b - Blue value (0-255)
-         * @returns {string} Hex color code
          */
         function rgbToHex(r, g, b) {
-            // Ensure values are within 0-255 range
             r = Math.max(0, Math.min(255, Math.round(r)));
             g = Math.max(0, Math.min(255, Math.round(g)));
             b = Math.max(0, Math.min(255, Math.round(b)));
-            
-            // Convert to hex and pad with zeros if needed
             const toHex = (n) => n.toString(16).padStart(2, '0');
             return '#' + toHex(r) + toHex(g) + toHex(b);
         }
 
         /**
          * Calculates relative luminance for a color (WCAG formula)
-         * @param {number} r - Red value (0-255)
-         * @param {number} g - Green value (0-255)
-         * @param {number} b - Blue value (0-255)
-         * @returns {number} Relative luminance value
          */
         function getLuminance(r, g, b) {
-            // Normalize RGB values to 0-1 range
             const normalize = (c) => {
                 c = c / 255;
-                // Apply sRGB gamma correction
                 return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
             };
-            
             const rNorm = normalize(r);
             const gNorm = normalize(g);
             const bNorm = normalize(b);
-            
-            // Calculate relative luminance using WCAG formula
             return 0.2126 * rNorm + 0.7152 * gNorm + 0.0722 * bNorm;
         }
 
         /**
          * Determines if white or black text should be used based on background color
-         * Uses WCAG contrast ratio guidelines for accessibility
-         * @param {string} hexColor - Background color in hex format
-         * @returns {string} "#000000" or "#ffffff"
          */
         function getContrastColor(hexColor) {
             const rgb = hexToRgb(hexColor);
             const luminance = getLuminance(rgb.r, rgb.g, rgb.b);
-            
-            // If luminance is above 0.5, use black text; otherwise use white
-            // This ensures ADA compliant contrast ratios
             return luminance > 0.5 ? '#000000' : '#ffffff';
         }
 
         /**
          * Generates a lighter shade of the given color
-         * @param {object} rgb - RGB color object {r, g, b}
-         * @param {number} percent - Percentage to lighten (0-100)
-         * @returns {string} Hex color code of lighter shade
          */
         function lightenColor(rgb, percent) {
-            // Calculate how much to add to each channel to reach white
             const factor = percent / 100;
             const r = rgb.r + (255 - rgb.r) * factor;
             const g = rgb.g + (255 - rgb.g) * factor;
             const b = rgb.b + (255 - rgb.b) * factor;
-            
             return rgbToHex(r, g, b);
         }
 
         /**
          * Generates a darker shade of the given color
-         * @param {object} rgb - RGB color object {r, g, b}
-         * @param {number} percent - Percentage to darken (0-100)
-         * @returns {string} Hex color code of darker shade
          */
         function darkenColor(rgb, percent) {
-            // Calculate how much to reduce each channel toward black
             const factor = 1 - (percent / 100);
             const r = rgb.r * factor;
             const g = rgb.g * factor;
             const b = rgb.b * factor;
-            
             return rgbToHex(r, g, b);
-        }
-
-        /**
-         * Removes duplicate consecutive colors from the array
-         * @param {array} colors - Array of hex color codes
-         * @returns {array} Array with duplicates removed
-         */
-        function removeDuplicates(colors) {
-            return colors.filter((color, index) => {
-                // Keep the color if it's different from the next one
-                // or if it's the last item
-                return index === colors.length - 1 || color !== colors[index + 1];
-            });
         }
 
         /**
@@ -363,9 +354,10 @@
             if (!/^#?([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/.test(hexColor)) {
                 shadeContainer.innerHTML = '<div class="error-message">⚠ Invalid hex color code ⚠</div>';
                 
-                // Reset input style on invalid
+                // Reset input style and hide label on invalid
                 colorInput.style.backgroundColor = '#ffffff';
                 colorInput.style.color = '#000000';
+                originalLabel.style.display = 'none';
                 return;
             }
             
@@ -374,63 +366,81 @@
                 hexColor = '#' + hexColor;
             }
             
-            // UPDATED: Change input background and text color for WCAG compliance
+            // Show the Original Label
+            originalLabel.style.display = 'block';
+
+            // Change input background and text color for WCAG compliance
             colorInput.style.backgroundColor = hexColor;
             colorInput.style.color = getContrastColor(hexColor);
             
+            // Change body background to the input color
+            document.body.style.backgroundColor = hexColor;
+            
             const rgb = hexToRgb(hexColor);
-            const shades = [];
-            
-            // Generate lighter shades (5% to 100% lighter) in reverse order
-            for (let i = 100; i >= 5; i -= 5) {
-                shades.push(lightenColor(rgb, i));
-            }
-            
-            // Add the original color
-            shades.push(hexColor.toLowerCase());
-            
-            // Generate darker shades (5% to 100% darker)
-            for (let i = 5; i <= 100; i += 5) {
-                shades.push(darkenColor(rgb, i));
-            }
-            
-            // Remove consecutive duplicate colors
-            const uniqueShades = removeDuplicates(shades);
             
             // Clear previous shades
             shadeContainer.innerHTML = '';
+
+            // Create columns
+            const leftColumn = document.createElement('div');
+            leftColumn.className = 'shade-column';
+            const rightColumn = document.createElement('div');
+            rightColumn.className = 'shade-column';
             
-            // Create and append shade boxes
-            uniqueShades.forEach(shade => {
+            // Helper to create a shade box with a label
+            const createShadeBox = (shade, labelText) => {
                 const shadeBox = document.createElement('div');
                 shadeBox.className = 'shade-box';
                 shadeBox.style.backgroundColor = shade;
                 
-                // Add special styling to the original input color
-                if (shade.toLowerCase() === hexColor.toLowerCase()) {
-                    shadeBox.classList.add('original-color');
-                }
+                // Add the percentage label
+                const label = document.createElement('div');
+                label.className = 'percentage-label';
+                label.textContent = labelText;
+                shadeBox.appendChild(label);
                 
                 // Set text color for ADA compliance
                 shadeBox.style.color = getContrastColor(shade);
                 
-                // Display the hex code
-                shadeBox.textContent = shade.toUpperCase();
+                // Display the hex code (using nodeValue/createTextNode to avoid wiping the child label)
+                const hexText = document.createTextNode(shade.toUpperCase());
+                shadeBox.appendChild(hexText);
                 
                 // Add click to copy functionality
                 shadeBox.addEventListener('click', () => {
-                    // Copy hex code to clipboard
                     navigator.clipboard.writeText(shade.toUpperCase()).then(() => {
-                        // Show notification on successful copy
                         showCopyNotification(shade.toUpperCase());
                     }).catch(err => {
-                        // Log error if copy fails
                         console.error('Failed to copy:', err);
                     });
                 });
                 
-                shadeContainer.appendChild(shadeBox);
-            });
+                return shadeBox;
+            };
+
+            // --- LEFT COLUMN (LIGHTER) ---
+            let lastLightShade = hexColor.toLowerCase();
+            for (let i = 5; i <= 100; i += 5) {
+                const shade = lightenColor(rgb, i);
+                if (shade !== lastLightShade) {
+                    leftColumn.appendChild(createShadeBox(shade, `${i}% LIGHTER`));
+                    lastLightShade = shade;
+                }
+            }
+
+            // --- RIGHT COLUMN (DARKER) ---
+            let lastDarkShade = hexColor.toLowerCase();
+            for (let i = 5; i <= 100; i += 5) {
+                const shade = darkenColor(rgb, i);
+                if (shade !== lastDarkShade) {
+                    rightColumn.appendChild(createShadeBox(shade, `${i}% DARKER`));
+                    lastDarkShade = shade;
+                }
+            }
+            
+            // Append columns to main container
+            shadeContainer.appendChild(leftColumn);
+            shadeContainer.appendChild(rightColumn);
         }
 
         // Event listener for input changes
@@ -439,10 +449,11 @@
             if (value) {
                 generateShades(value);
             } else {
-                // Clear shades and reset input style if input is empty
+                // Clear shades, reset input style, and hide label if input is empty
                 shadeContainer.innerHTML = '';
                 colorInput.style.backgroundColor = '#ffffff';
                 colorInput.style.color = '#000000';
+                originalLabel.style.display = 'none';
             }
         });
 
