@@ -104,11 +104,11 @@
             height: 50px;
             -webkit-appearance: none;
             appearance: none;
-            background: transparent;
+            background: transparent; /* Background handled by track specific rules below */
             cursor: pointer;
         }
 
-        /* Slider track */
+        /* Slider track base styles */
         input[type="range"]::-webkit-slider-track {
             height: 50px;
             border: 4px solid #000;
@@ -119,37 +119,38 @@
             border: 4px solid #000;
         }
 
-        /* Individual slider backgrounds */
+        /* --- UPDATED: DIAGONAL BACKGROUNDS FOR SLIDERS --- */
+
+        /* Red Slider: Red to White diagonal split */
         #redSlider::-webkit-slider-track {
-            background: #FF0000;
+            background: linear-gradient(135deg, #FF0000 0%, #FF0000 50%, #fff 50%, #fff 100%);
         }
         #redSlider::-moz-range-track {
-            background: #FF0000;
+            background: linear-gradient(135deg, #FF0000 0%, #FF0000 50%, #fff 50%, #fff 100%);
         }
 
+        /* Green Slider: Green to White diagonal split */
         #greenSlider::-webkit-slider-track {
-            background: #00FF00;
+            background: linear-gradient(135deg, #00FF00 0%, #00FF00 50%, #fff 50%, #fff 100%);
         }
         #greenSlider::-moz-range-track {
-            background: #00FF00;
+            background: linear-gradient(135deg, #00FF00 0%, #00FF00 50%, #fff 50%, #fff 100%);
         }
 
+        /* Blue Slider: Blue to White diagonal split */
         #blueSlider::-webkit-slider-track {
-            background: #0000FF;
+            background: linear-gradient(135deg, #0000FF 0%, #0000FF 50%, #fff 50%, #fff 100%);
         }
         #blueSlider::-moz-range-track {
-            background: #0000FF;
+            background: linear-gradient(135deg, #0000FF 0%, #0000FF 50%, #fff 50%, #fff 100%);
         }
 
+        /* Lightness Slider: Black to White diagonal split */
         #lightnessSlider::-webkit-slider-track {
-            background: 
-                linear-gradient(135deg, #000000 0%, #000000 50%, transparent 50.1%, transparent 100%),
-                #FFFFFF;
+            background: linear-gradient(135deg, #000000 0%, #000000 50%, #fff 50%, #fff 100%);
         }
         #lightnessSlider::-moz-range-track {
-            background: 
-                linear-gradient(135deg, #000000 0%, #000000 50%, transparent 50.1%, transparent 100%),
-                #FFFFFF;
+            background: linear-gradient(135deg, #000000 0%, #000000 50%, #fff 50%, #fff 100%);
         }
 
         /* Slider thumb */
@@ -293,60 +294,53 @@
     </style>
 </head>
 <body>
-            <h1>Color Picker</h1>
-        <p class="subtitle">Adjust RGB values, copy the hex code</p>
-    <div class="container">
 
-        
+    <h1>Color Picker</h1>
+    <p class="subtitle">Adjust RGB values, copy the hex code</p>
+    
+    <div class="container">
         <div class="picker-wrapper">
-            <!-- RGB Sliders section -->
             <div class="sliders-section">
-                <!-- Red slider -->
                 <div class="slider-group">
                     <label for="redSlider">Red (R):</label>
                     <div class="slider-container">
-                        <input type="range" id="redSlider" min="0" max="255" value="255">
-                        <input type="number" class="value-display" id="redValue" min="0" max="255" value="255">
+                        <input type="range" id="redSlider" min="0" max="255" value="175">
+                        <input type="number" class="value-display" id="redValue" min="0" max="255" value="175">
                     </div>
                 </div>
 
-                <!-- Green slider -->
                 <div class="slider-group">
                     <label for="greenSlider">Green (G):</label>
                     <div class="slider-container">
-                        <input type="range" id="greenSlider" min="0" max="255" value="107">
-                        <input type="number" class="value-display" id="greenValue" min="0" max="255" value="107">
+                        <input type="range" id="greenSlider" min="0" max="255" value="237">
+                        <input type="number" class="value-display" id="greenValue" min="0" max="255" value="237">
                     </div>
                 </div>
 
-                <!-- Blue slider -->
                 <div class="slider-group">
                     <label for="blueSlider">Blue (B):</label>
                     <div class="slider-container">
-                        <input type="range" id="blueSlider" min="0" max="255" value="107">
-                        <input type="number" class="value-display" id="blueValue" min="0" max="255" value="107">
+                        <input type="range" id="blueSlider" min="0" max="255" value="96">
+                        <input type="number" class="value-display" id="blueValue" min="0" max="255" value="96">
                     </div>
                 </div>
 
-                <!-- Lightness slider -->
                 <div class="slider-group">
                     <label for="lightnessSlider">Lightness:</label>
                     <div class="slider-container">
-                        <input type="range" id="lightnessSlider" min="-100" max="100" value="0">
-                        <input type="number" class="value-display" id="lightnessValue" min="-100" max="100" value="0">
+                        <input type="range" id="lightnessSlider" min="-100" max="100" value="-79">
+                        <input type="number" class="value-display" id="lightnessValue" min="-100" max="100" value="-79">
                     </div>
                 </div>
             </div>
 
-            <!-- Color display tile that shows selected color and hex code -->
             <div class="color-display" id="colorDisplay">
-                <span class="hex-label" id="hexLabel">#FF6B6B</span>
+                <span class="hex-label" id="hexLabel">#253214</span>
             </div>
         </div>
 
         <p class="click-instruction">👆 Click the color tile to copy hex code</p>
 
-        <!-- Notification banner -->
         <div class="notification" id="notification">
             Copied to clipboard! ✓
         </div>
