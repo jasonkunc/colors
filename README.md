@@ -6,5 +6,5 @@ The [Color Shade Generator](https://jasonkunc.github.io/colors/color-shade-gener
 
 The [Batch Hex Code Viewer](https://jasonkunc.github.io/colors/use-these-colors.html) is intended to just show a visual display of what a bunch of hex color codes are.
 
-
+The [Color Picker](https://jasonkunc.github.io/colors/color-picker.html) has simple sliders to pick out a color, the selected color also changes the body background.
 
