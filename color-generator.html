@@ -144,50 +144,42 @@
             height: 50px;
             -webkit-appearance: none;
             appearance: none;
-            background: transparent;
             cursor: pointer;
+            border: 4px solid #000;
+            background: transparent;
         }
 
-        /* Slider track base styles */
+        /* Slider track base styles for WebKit (Chrome, Safari, Edge) */
         input[type="range"]::-webkit-slider-track {
-            height: 50px;
-            border: 4px solid #000;
+            height: 42px;
+            border: none;
+            background: transparent;
         }
 
+        /* Slider track for Firefox */
         input[type="range"]::-moz-range-track {
-            height: 50px;
-            border: 4px solid #000;
+            height: 42px;
+            border: none;
+            background: transparent;
         }
 
         /* Red Slider: 50/50 split Red to White */
-        #redSlider::-webkit-slider-track {
-            background: linear-gradient(90deg, #FF0000 0%, #FF0000 50%, #fff 50%, #fff 100%);
-        }
-        #redSlider::-moz-range-track {
+        #redSlider {
             background: linear-gradient(90deg, #FF0000 0%, #FF0000 50%, #fff 50%, #fff 100%);
         }
 
         /* Green Slider: 50/50 split Green to White */
-        #greenSlider::-webkit-slider-track {
-            background: linear-gradient(90deg, #00FF00 0%, #00FF00 50%, #fff 50%, #fff 100%);
-        }
-        #greenSlider::-moz-range-track {
+        #greenSlider {
             background: linear-gradient(90deg, #00FF00 0%, #00FF00 50%, #fff 50%, #fff 100%);
         }
 
         /* Blue Slider: 50/50 split Blue to White */
-        #blueSlider::-webkit-slider-track {
-            background: linear-gradient(90deg, #0000FF 0%, #0000FF 50%, #fff 50%, #fff 100%);
-        }
-        #blueSlider::-moz-range-track {
+        #blueSlider {
             background: linear-gradient(90deg, #0000FF 0%, #0000FF 50%, #fff 50%, #fff 100%);
         }
 
         /* Lightness Slider: 50/50 split Black to White */
-        #lightnessSlider::-webkit-slider-track {
-            background: linear-gradient(90deg, #000000 0%, #000000 50%, #fff 50%, #fff 100%);
-        }
-        #lightnessSlider::-moz-range-track {
+        #lightnessSlider {
             background: linear-gradient(90deg, #000000 0%, #000000 50%, #fff 50%, #fff 100%);
         }
 
