@@ -227,15 +227,15 @@
     <div class="container">
             <h1>BATCH HEX CODE VIEWER</h1>
 
-         <p class="subtitle">Enter hex codes separated by spaces or commas</p>
+         <p class="subtitle">Paste any text containing hex codes to extract and view them</p>
 
         <!-- Input section -->
         <div class="input-section">
             <label for="hexInput">Hex Codes:</label>
             <textarea 
                 id="hexInput" 
-                placeholder="e.g., #FF5733 3498db, #2ecc71 e74c3c #9b59b6"
-                aria-label="Enter hex color codes separated by spaces or commas"
+                placeholder="e.g., $green: #113CA1; $purple: #5A3CA1; 1575EF"
+                aria-label="Paste any text containing hex color codes"
             ></textarea>
             <button id="showColors" type="button">SHOW COLORS</button>
         </div>
@@ -422,16 +422,17 @@
 
         /**
          * Parses input string and extracts hex codes
-         * Handles multiple separators: spaces, commas, or combinations
+         * Uses regex to find hex patterns in any text content
          * @param {string} input - Raw input string from textarea
          * @returns {Array<string>} - Array of hex code strings
          */
         function parseHexCodes(input) {
-            // Split by spaces and/or commas, filter empty strings
-            return input
-                .split(/[\s,]+/)
-                .map(code => code.trim())
-                .filter(code => code.length > 0);
+            // Regex to match hex color codes (3 or 6 characters, with or without #)
+            const hexRegex = /#?[0-9A-Fa-f]{3}(?:[0-9A-Fa-f]{3})?/g;
+            
+            // Find all matches and return them
+            const matches = input.match(hexRegex);
+            return matches ? matches : [];
         }
 
         /**
