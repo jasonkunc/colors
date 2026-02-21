@@ -1,7 +1,7 @@
 <div style="font-family: 'Courier New', monospace; background: #979797; padding: 40px 20px; min-height: 100vh; margin: -20px;">
 <div style="max-width: 900px; margin: 0 auto;">
 
-<h1 style="font-size: 48px; font-weight: 900; text-transform: uppercase; color: #000; border: 6px solid #000; padding: 20px 30px; background-color: #FFD700; box-shadow: 12px 12px 0 #000; margin-bottom: 20px; text-align: center;">COLOR TOOLS</h1>
+<h1 style="font-size: 48px; font-weight: 900; text-transform: uppercase; color: #000; border: 6px solid #000; padding: 20px 30px; background-color: #FFD700; box-shadow: 12px 12px 0 #000; margin-bottom: 20px; text-align: center;">TOOLS</h1>
 
 <div style="background-color: #fff; border: 4px solid #000; padding: 15px 25px; font-size: 16px; font-weight: bold; text-transform: uppercase; box-shadow: 8px 8px 0 #000; margin-bottom: 40px; text-align: center;">
 A collection of web tools with neobrutalist design
@@ -25,12 +25,12 @@ A collection of web tools with neobrutalist design
 <div style="flex: 0 0 300px;">
 <div style="display: flex; flex-direction: column; gap: 10px;">
 <a href="https://jasonkunc.github.io/tools/ipsum/vegan-ipsum.html" style="display: block; text-decoration: none;">
-<div style="background-color: #4CAF50; border: 3px solid #000; padding: 15px; text-align: center; font-weight: bold; text-transform: uppercase; box-shadow: 4px 4px 0 #000; color: #fff;">
+<div style="background-color: #2E7D32; border: 3px solid #000; padding: 15px; text-align: center; font-weight: bold; text-transform: uppercase; box-shadow: 4px 4px 0 #000; color: #fff;">
 VEGAN IPSUM
 </div>
 </a>
 <a href="https://jasonkunc.github.io/tools/ipsum/skate-ipsum.html" style="display: block; text-decoration: none;">
-<div style="background-color: #2196F3; border: 3px solid #000; padding: 15px; text-align: center; font-weight: bold; text-transform: uppercase; box-shadow: 4px 4px 0 #000; color: #fff;">
+<div style="background-color: #1565C0; border: 3px solid #000; padding: 15px; text-align: center; font-weight: bold; text-transform: uppercase; box-shadow: 4px 4px 0 #000; color: #fff;">
 SKATE IPSUM
 </div>
 </a>
