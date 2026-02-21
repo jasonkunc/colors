@@ -22,7 +22,7 @@ A small collection of web color tools with neobrutalist design
 </ul>
 </div>
 <div style="flex: 0 0 300px;">
-<a href="https://jasonkunc.github.io/colors/batch-hex-code-viewer.html" style="display: block; text-decoration: none;">
+<a href="https://jasonkunc.github.io/tools/batch-hex-code-viewer.html" style="display: block; text-decoration: none;">
 <img src="img/batch-hex-code-viewer.png" alt="Batch Hex Code Viewer Screenshot" style="width: 100%; border: 4px solid #000; box-shadow: 6px 6px 0 #000; transition: all 0.1s;">
 </a>
 <div style="background-color: #FFD700; border: 3px solid #000; padding: 10px; text-align: center; font-weight: bold; text-transform: uppercase; margin-top: 10px; box-shadow: 4px 4px 0 #000;">
@@ -47,7 +47,7 @@ A small collection of web color tools with neobrutalist design
 </ul>
 </div>
 <div style="flex: 0 0 300px;">
-<a href="https://jasonkunc.github.io/colors/color-shade-generator.html" style="display: block; text-decoration: none;">
+<a href="https://jasonkunc.github.io/tools/color-shade-generator.html" style="display: block; text-decoration: none;">
 <img src="img/color-shade-generator.png" alt="Color Shade Generator Screenshot" style="width: 100%; border: 4px solid #000; box-shadow: 6px 6px 0 #000; transition: all 0.1s;">
 </a>
 <div style="background-color: #FF00FF; border: 3px solid #000; padding: 10px; text-align: center; font-weight: bold; text-transform: uppercase; margin-top: 10px; box-shadow: 4px 4px 0 #000; color: #fff;">
@@ -72,7 +72,7 @@ A small collection of web color tools with neobrutalist design
 </ul>
 </div>
 <div style="flex: 0 0 300px;">
-<a href="https://jasonkunc.github.io/colors/color-generator.html" style="display: block; text-decoration: none;">
+<a href="https://jasonkunc.github.io/tools/color-generator.html" style="display: block; text-decoration: none;">
 <img src="img/color-generator.png" alt="Color Generator Screenshot" style="width: 100%; border: 4px solid #000; box-shadow: 6px 6px 0 #000; transition: all 0.1s;">
 </a>
 <div style="background-color: #FF6B6B; border: 3px solid #000; padding: 10px; text-align: center; font-weight: bold; text-transform: uppercase; margin-top: 10px; box-shadow: 4px 4px 0 #000; color: #fff;">
